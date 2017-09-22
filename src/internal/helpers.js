@@ -23,7 +23,7 @@ module.exports = {
 			const key = this.config.user + this.config.pass;
 			
 			if (clients[key]) {
-			    resolve([null, clients[key]);
+			    resolve([null, clients[key]]);
 			    return;
 			}
 			
