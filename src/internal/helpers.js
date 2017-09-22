@@ -14,10 +14,19 @@ const ldap = require('ldapjs');
  *  _modifyDN(oldDN, newDN)
  */
 
+let clients = {};
+
 module.exports = {
 
 	async _getBoundClient() {
 		return new Promise(async (resolve, reject) => {
+			const key = this.config.user + this.config.pass;
+			
+			if (clients[key]) {
+			    resolve([null, clients[key]);
+			    return;
+			}
+			
 			const client = ldap.createClient({
 			    url: this.config.url,
 			    tlsOptions: {
@@ -25,7 +34,11 @@ module.exports = {
 			    }
 			});
 
-	        client.bind(this.config.user, this.config.pass, function(err, data) {  
+	        client.bind(this.config.user, this.config.pass, function(err, data) {
+			if (!err) {
+			    clients[key] = client;
+			}
+			
 	        	resolve([err, client]);
 	        });
 		});
