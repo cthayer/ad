@@ -33,12 +33,13 @@ module.exports = {
 			    	rejectUnauthorized: false
 			    }
 			});
+			
+			clients[key] = client;
 
 	        client.bind(this.config.user, this.config.pass, function(err, data) {
-			if (!err) {
-			    clients[key] = client;
+			if (err) {
+				delete clients[key];
 			}
-			
 	        	resolve([err, client]);
 	        });
 		});
